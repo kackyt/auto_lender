@@ -30,13 +30,22 @@ status.each do |name, stat|
     amount = stat['available']
 
     if stat['rate'] == 0
-      lends = client.lends(name)
+      lends = client.lends(name, {limit_lends: 3})
       sum = lends.inject([0, 0]) do |memo, l|
         [memo[0] + l['rate'].to_f * l['amount_used'].to_f,
          memo[1] + l['amount_used'].to_f]
       end
 
-      rate = sum[0] / sum[1]
+      frr = sum[0] / sum[1]
+
+      book = client.funding_book(name, {limit_bids: 0, limit_asks: 5})
+      sum = book['asks'].inject([0, 0]) do |memo, b|
+        [memo[0] + b['rate'].to_f * b['amount'].to_f,
+         memo[1] + b['amount'].to_f]
+      end
+
+      bookrate = sum[0] / sum[1]
+      rate = (frr + bookrate) / 2
     else
       book = client.funding_book(name, {limit_bids: 0, limit_asks: 1})
       toprate = book['asks'][0]['rate'].to_f
