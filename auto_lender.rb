@@ -26,7 +26,7 @@ end
 p status
 
 status.each do |name, stat|
-  if stat['available'] > stat['amount'] * 0.1
+  if stat['available'] > stat['amount'] * 0.01
     book = client.funding_book(name, {limit_bids: 0, limit_asks: 1})
     toprate = book['asks'][0]['rate'].to_f
     amount = stat['available']
