@@ -27,10 +27,22 @@ p status
 
 status.each do |name, stat|
   if stat['available'] > stat['amount'] * 0.01
-    book = client.funding_book(name, {limit_bids: 0, limit_asks: 1})
-    toprate = book['asks'][0]['rate'].to_f
     amount = stat['available']
-    rate = [stat['rate'] * 365, toprate].max
+
+    if stat['rate'] == 0
+      lends = client.lends(name)
+      sum = lends.inject([0, 0]) do |memo, l|
+        [memo[0] + l['rate'].to_f * l['amount_used'].to_f,
+         memo[1] + l['amount_used'].to_f]
+      end
+
+      rate = sum[0] / sum[1]
+    else
+      book = client.funding_book(name, {limit_bids: 0, limit_asks: 1})
+      toprate = book['asks'][0]['rate'].to_f
+      rate = [stat['rate'] * 365, toprate].max
+    end
+
     period = 2
     if stat['period']
       period = stat['period']
