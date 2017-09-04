@@ -1,9 +1,20 @@
+# coding: utf-8
 require 'rubygems'
 require 'bitfinex'
 require 'dotenv'
 require 'yaml'
+require 'net/http'
 
 Dotenv.load
+
+# disable fileの存在確認
+if ENV['DISABLE_URI']
+  res = Net::HTTP.get_response(URI.parse(ENV['DISABLE_URI']))
+  if res.code == '200'
+    # 機能を停止する
+    exit
+  end
+end
 
 status = YAML.load_file('config.yml')
 
