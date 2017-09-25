@@ -25,6 +25,17 @@ end
 
 client = Bitfinex::Client.new
 
+offers = client.offers
+
+offers.each do |offer|
+  if status[offer['currency'].downcase] &&
+     status['timestamp'].to_f + 600 < Time.now.to_f &&
+                                offer['is_live']
+    puts "cancel offer #{offer['id']}"
+    client.cancel_offer(offer['id'])
+  end
+end
+
 client.balances.each do |b|
   if b['type'] == 'deposit'
     if status[b['currency']]
