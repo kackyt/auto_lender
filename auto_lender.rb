@@ -80,9 +80,10 @@ status.each do |name, stat|
     end
 
     if stat['end']
-      today = Datetime.now
-      enddate = Datetime.strptime(stat['end'], '%F')
-      period = enddate - today
+      today = DateTime.now
+      enddate = DateTime.strptime(stat['end'], '%F')
+      period = (enddate - today).round
+      p period
     end
 
     if period > 30
@@ -90,6 +91,8 @@ status.each do |name, stat|
     end
 
     puts "offer name = #{name} amount = #{amount} rate = #{rate} period = #{period}"
-    client.new_offer(name, amount, rate, period, 'lend')
+    if period >= 2
+      client.new_offer(name, amount, rate, period, 'lend')
+    end
   end
 end
