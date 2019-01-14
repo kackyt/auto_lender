@@ -18,12 +18,10 @@ end
 
 status = YAML.load_file('config.yml')
 
-Bitfinex::Client.configure do |conf|
-  conf.secret = ENV['BFX_API_SECRET']
-  conf.api_key = ENV['BFX_API_KEY']
-end
-
-client = Bitfinex::Client.new
+client = Bitfinex::RESTv1.new({
+                                :api_key => ENV['BFX_API_KEY'],
+                                :api_secret => ENV['BFX_API_SECRET']
+                              })
 
 offers = client.offers
 

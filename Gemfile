@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'bitfinex-rb'
+gem 'bitfinex-rb', :require => 'bitfinex'
 gem 'dotenv'
