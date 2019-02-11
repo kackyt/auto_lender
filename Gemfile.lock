@@ -28,6 +28,9 @@ GEM
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     json (2.1.0)
+    mail (2.7.1)
+      mini_mime (>= 0.1.1)
+    mini_mime (1.0.1)
     multipart-post (2.0.0)
     socksify (1.7.1)
     websocket-driver (0.7.0)
@@ -41,6 +44,7 @@ PLATFORMS
 DEPENDENCIES
   bitfinex-rb
   dotenv
+  mail
 
 BUNDLED WITH
-   1.11.2
+   1.13.7
